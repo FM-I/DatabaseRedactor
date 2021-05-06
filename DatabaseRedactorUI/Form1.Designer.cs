@@ -31,9 +31,9 @@ namespace DatabaseRedactorUI
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.connection = new System.Windows.Forms.Button();
-            this.databaseBox = new System.Windows.Forms.TextBox();
             this.tableBox = new System.Windows.Forms.TextBox();
+            this.databaseBox = new System.Windows.Forms.TextBox();
+            this.connection = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -63,12 +63,27 @@ namespace DatabaseRedactorUI
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AllowDrop = true;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(800, 350);
             this.dataGridView1.TabIndex = 0;
+            // 
+            // tableBox
+            // 
+            this.tableBox.Location = new System.Drawing.Point(12, 52);
+            this.tableBox.Name = "tableBox";
+            this.tableBox.Size = new System.Drawing.Size(100, 23);
+            this.tableBox.TabIndex = 2;
+            // 
+            // databaseBox
+            // 
+            this.databaseBox.Location = new System.Drawing.Point(12, 13);
+            this.databaseBox.Name = "databaseBox";
+            this.databaseBox.Size = new System.Drawing.Size(100, 23);
+            this.databaseBox.TabIndex = 1;
             // 
             // connection
             // 
@@ -79,20 +94,6 @@ namespace DatabaseRedactorUI
             this.connection.Text = "Connect";
             this.connection.UseVisualStyleBackColor = true;
             this.connection.Click += new System.EventHandler(this.connection_Click);
-            // 
-            // databaseBox
-            // 
-            this.databaseBox.Location = new System.Drawing.Point(12, 13);
-            this.databaseBox.Name = "databaseBox";
-            this.databaseBox.Size = new System.Drawing.Size(100, 23);
-            this.databaseBox.TabIndex = 1;
-            // 
-            // tableBox
-            // 
-            this.tableBox.Location = new System.Drawing.Point(12, 52);
-            this.tableBox.Name = "tableBox";
-            this.tableBox.Size = new System.Drawing.Size(100, 23);
-            this.tableBox.TabIndex = 2;
             // 
             // Form1
             // 

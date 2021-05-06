@@ -5,6 +5,9 @@ using System.Text;
 
 namespace DatabaseRedactorUI.Controllers
 {
+    /// <summary>
+    /// Клас для підключення до серверу
+    /// </summary>
     public class ConnectionController
     {
         private string address;
@@ -14,6 +17,11 @@ namespace DatabaseRedactorUI.Controllers
             this.address = address;
         }
 
+        /// <summary>
+        /// Метод для відправки Get запиту на сервер
+        /// </summary>
+        /// <param name="values">Словник Get параметрів у форматі <назва, параметр></param>
+        /// <returns>Результат запиту</returns>
         public string GetConnection(Dictionary<string, string> values)
         {
             string responce;
