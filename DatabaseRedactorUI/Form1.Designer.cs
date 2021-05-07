@@ -34,6 +34,7 @@ namespace DatabaseRedactorUI
             this.tableBox = new System.Windows.Forms.TextBox();
             this.databaseBox = new System.Windows.Forms.TextBox();
             this.connection = new System.Windows.Forms.Button();
+            this.adressBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -54,6 +55,7 @@ namespace DatabaseRedactorUI
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.adressBox);
             this.splitContainer1.Panel2.Controls.Add(this.tableBox);
             this.splitContainer1.Panel2.Controls.Add(this.databaseBox);
             this.splitContainer1.Panel2.Controls.Add(this.connection);
@@ -87,13 +89,20 @@ namespace DatabaseRedactorUI
             // 
             // connection
             // 
-            this.connection.Location = new System.Drawing.Point(118, 13);
+            this.connection.Location = new System.Drawing.Point(234, 13);
             this.connection.Name = "connection";
             this.connection.Size = new System.Drawing.Size(81, 62);
             this.connection.TabIndex = 0;
             this.connection.Text = "Connect";
             this.connection.UseVisualStyleBackColor = true;
             this.connection.Click += new System.EventHandler(this.connection_Click);
+            // 
+            // adressBox
+            // 
+            this.adressBox.Location = new System.Drawing.Point(118, 13);
+            this.adressBox.Name = "adressBox";
+            this.adressBox.Size = new System.Drawing.Size(100, 23);
+            this.adressBox.TabIndex = 3;
             // 
             // Form1
             // 
@@ -121,6 +130,7 @@ namespace DatabaseRedactorUI
         private System.Windows.Forms.Button connection;
         private System.Windows.Forms.TextBox tableBox;
         private System.Windows.Forms.TextBox databaseBox;
+        private System.Windows.Forms.TextBox adressBox;
     }
 }
 

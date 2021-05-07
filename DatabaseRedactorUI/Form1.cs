@@ -7,6 +7,9 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.Serialization.Json;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace DatabaseRedactorUI
 {
@@ -15,8 +18,7 @@ namespace DatabaseRedactorUI
         private ConnectionController connectionController;
         private JsonParseController jsonParseController;
 
-        private string databaseName;
-        private string tableName;
+        
 
         private int indexId = 0;
         public Form1()
@@ -31,9 +33,9 @@ namespace DatabaseRedactorUI
             dataGridView1.DragDrop += DataGridView1_DragDrop;
             dataGridView1.DragOver += DataGridView1_DragOver;
 
-
-            connectionController = new ConnectionController("https://461e33af8aa9.ngrok.io/");
             jsonParseController = new JsonParseController();
+
+            LoadConnection();
         }
 
         //db-golang
@@ -41,9 +43,45 @@ namespace DatabaseRedactorUI
 
         private void connection_Click(object sender, EventArgs e)
         {
-            databaseName = databaseBox.Text;
-            tableName = tableBox.Text;
+            //TODO : Проверка входных данных
+            connectionController = new ConnectionController(adressBox.Text, databaseBox.Text, tableBox.Text);//"https://461e33af8aa9.ngrok.io/");
+
             ConnectionAsync();
+
+            SaveConnection();
+        }
+
+        /// <summary>
+        /// Сохранени подулючения
+        /// </summary>
+        private void SaveConnection()
+        {
+            var formatter = new BinaryFormatter();
+
+            using (var file = new FileStream("connection.bin", FileMode.OpenOrCreate))
+            {
+                formatter.Serialize(file, connectionController);
+            }
+        }
+
+        /// <summary>
+        /// Загрузка сохранненого подключения
+        /// </summary>
+        private void LoadConnection()
+        {
+            var formatter = new BinaryFormatter();
+
+            using (var file = new FileStream("connection.bin", FileMode.OpenOrCreate))
+            {
+                if (file.Length > 0)
+                {
+                    var connection = formatter.Deserialize(file) as ConnectionController;
+                    
+                    adressBox.Text = connection.Address;
+                    databaseBox.Text = connection.Database;
+                    tableBox.Text = connection.Table;
+                }
+            }
         }
 
         /// <summary>
