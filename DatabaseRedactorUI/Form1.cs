@@ -2,12 +2,10 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -17,8 +15,6 @@ namespace DatabaseRedactorUI
     {
         private ConnectionController connectionController;
         private JsonParseController jsonParseController;
-
-        
 
         private int indexId = 0;
         public Form1()
@@ -33,6 +29,8 @@ namespace DatabaseRedactorUI
             dataGridView1.DragDrop += DataGridView1_DragDrop;
             dataGridView1.DragOver += DataGridView1_DragOver;
 
+            portBox.Maximum = uint.MaxValue;
+            portBox.Minimum = uint.MinValue;
             jsonParseController = new JsonParseController();
 
             LoadConnection();
@@ -44,10 +42,8 @@ namespace DatabaseRedactorUI
         private void connection_Click(object sender, EventArgs e)
         {
             //TODO : Проверка входных данных
-            connectionController = new ConnectionController(adressBox.Text, databaseBox.Text, tableBox.Text);//"https://461e33af8aa9.ngrok.io/");
-
+            connectionController = new ConnectionController(adressBox.Text, (uint)portBox.Value, databaseBox.Text, tableBox.Text);//"https://461e33af8aa9.ngrok.io/");
             ConnectionAsync();
-
             SaveConnection();
         }
 
@@ -80,6 +76,7 @@ namespace DatabaseRedactorUI
                     adressBox.Text = connection.Address;
                     databaseBox.Text = connection.Database;
                     tableBox.Text = connection.Table;
+                    portBox.Value = connection.Port;
                 }
             }
         }
@@ -91,7 +88,6 @@ namespace DatabaseRedactorUI
         {
             var res = await Task.Run(Connection);
             FillData(res);
-
         }
 
         /// <summary>
@@ -101,14 +97,12 @@ namespace DatabaseRedactorUI
         {
             Dictionary<string, string> values = new Dictionary<string, string>();
 
-            values.Add("bd_name", "db-golang");
-            values.Add("table_name", "table");
+            values.Add("bd_name", connectionController.Database);
+            values.Add("table_name", connectionController.Table);
 
             try
             {
-                return jsonParseController.ParseJSON("{\"cost\":[14,12,41,53],\"id\":[1,2,3,4],\"name\":[24,124,123,12]}");//connectionController.GetConnection(values));
-                //MessageBox.Show(json.ToString());
-
+                return jsonParseController.ParseJSON(connectionController.GetConnection(values));
             }
             catch (Exception ex)
             {
@@ -123,6 +117,9 @@ namespace DatabaseRedactorUI
         /// <param name="jsonValues">Об'єкт Json із данними для заповнення</param>
         private void FillData(JObject jsonValues)
         {
+            dataGridView1.Rows.Clear();
+            dataGridView1.Columns.Clear();
+
             var en = jsonValues.GetEnumerator();
 
             while (en.MoveNext())
@@ -154,6 +151,27 @@ namespace DatabaseRedactorUI
             }
         }
 
+        /// <summary>
+        /// Отправка данных таблицы на сервер
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SendData(object sender, EventArgs e)
+        {
+            Dictionary<string, List<object>> dict = new Dictionary<string, List<object>>();
+            foreach (DataGridViewColumn col in dataGridView1.Columns)
+            {
+                List<object> list = new List<object>();
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    if (!row.IsNewRow)
+                        list.Add(row.Cells[col.Name].Value);
+                }
+                dict.Add(col.Name, list);
+            }
+
+            connectionController.PostConnection(jsonParseController.SerializeData(dict));
+        }
 
         #region Перетаскування
 

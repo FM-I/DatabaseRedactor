@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace DatabaseRedactorUI.Controllers
@@ -19,6 +20,11 @@ namespace DatabaseRedactorUI.Controllers
                 return null;
             }
             return JSONObj;
+        }
+
+        public string SerializeData(object data)
+        {
+            return JsonConvert.SerializeObject(data);
         }
     }
 }

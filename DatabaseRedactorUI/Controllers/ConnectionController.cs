@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Runtime.Serialization;
-using System.Text.Json;
 
 namespace DatabaseRedactorUI.Controllers
 {
@@ -15,12 +13,14 @@ namespace DatabaseRedactorUI.Controllers
         public string Address { get; private set; }
         public string Database { get; private set; }
         public string Table { get; private set; }
+        public uint Port { get; private set; }
 
-        public ConnectionController(string address, string database, string table)
+        public ConnectionController(string address, uint port, string database, string table)
         {
             Address = address;
             Database = database;
             Table = table;
+            Port = port;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace DatabaseRedactorUI.Controllers
                 foreach (var getItem in values)
                     webClient.QueryString.Add(getItem.Key, getItem.Value);
 
-                responce = webClient.DownloadString(Address);
+                responce = webClient.DownloadString($"{Address}:{Port}");
             }
             return responce;
         }
@@ -46,13 +46,12 @@ namespace DatabaseRedactorUI.Controllers
         /// </summary>
         /// <param name="values">Словник Get параметрів у форматі <назва, параметр></param>
         /// <returns>Результат запиту</returns>
-        public string PostConnection(Dictionary<string, string> values)
+        public string PostConnection(string data)
         {
             string responce = null;
             using (var webClient = new WebClient())
             {
-                var pars = JsonSerializer.Serialize(values);
-                responce = webClient.UploadString(Address, pars);
+                responce = webClient.UploadString(Address, data);
             }
             return responce;
         }
